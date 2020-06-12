@@ -1,0 +1,12 @@
+{
+  "$schema": "../../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "name": "my-builder",
+  "version": "0.0.1",
+  "schematics": {
+    "my-builder": {
+      "factory": "./src/schematics/my-builder/schematic",
+      "schema": "./src/schematics/my-builder/schema.json",
+      "description": "my-builder schematic"
+    }
+  }
+}
