@@ -25,6 +25,13 @@
     "my-builder-e2e": {
       "tags": [],
       "implicitDependencies": ["my-builder"]
+    },
+    "demo": {
+      "tags": []
+    },
+    "demo-e2e": {
+      "tags": [],
+      "implicitDependencies": ["demo"]
     }
   }
 }

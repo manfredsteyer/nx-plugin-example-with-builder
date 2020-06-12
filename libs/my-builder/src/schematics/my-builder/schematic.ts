@@ -31,7 +31,7 @@ interface NormalizedSchema extends MyBuilderSchematicSchema {
 }
 
 function normalizeOptions(options: MyBuilderSchematicSchema): NormalizedSchema {
-  const name = toFileName(options.name);
+  const name = toFileName(options.project);
   const projectDirectory = options.directory
     ? `${toFileName(options.directory)}/${name}`
     : name;
@@ -55,7 +55,7 @@ function addFiles(options: NormalizedSchema): Rule {
     apply(url(`./files`), [
       applyTemplates({
         ...options,
-        ...names(options.name),
+        ...names(options.projectName),
         offsetFromRoot: offsetFromRoot(options.projectRoot),
       }),
       move(options.projectRoot),
@@ -67,21 +67,30 @@ export default function (options: MyBuilderSchematicSchema): Rule {
   const normalizedOptions = normalizeOptions(options);
   return chain([
     updateWorkspace((workspace) => {
-      workspace.projects
+
+      const build = workspace.projects.get(options.project)
+      .targets.get('build');
+
+      workspace.projects.get(options.project)
+        .targets.delete('build');
+
+      workspace.projects.get(options.project)
+        // .add({
+        //   name: normalizedOptions.projectName,
+        //   root: normalizedOptions.projectRoot,
+        //   sourceRoot: `${normalizedOptions.projectRoot}/src`,
+        //   projectType,
+        // })
+        .targets
         .add({
-          name: normalizedOptions.projectName,
-          root: normalizedOptions.projectRoot,
-          sourceRoot: `${normalizedOptions.projectRoot}/src`,
-          projectType,
-        })
-        .targets.add({
+          ...build,
           name: 'build',
           builder: '@my-org/my-builder:build',
         });
     }),
-    addProjectToNxJsonInTree(normalizedOptions.projectName, {
-      tags: normalizedOptions.parsedTags,
-    }),
-    addFiles(normalizedOptions),
+    // addProjectToNxJsonInTree(normalizedOptions.projectName, {
+    //   tags: normalizedOptions.parsedTags,
+    // }),
+    // addFiles(normalizedOptions),
   ]);
 }

@@ -3,8 +3,14 @@ import { TestingArchitectHost } from '@angular-devkit/architect/testing';
 import { schema } from '@angular-devkit/core';
 import { join } from 'path';
 import { BuildBuilderSchema } from './schema';
+import { BrowserBuilderOptions } from '@angular-devkit/build-angular';
 
-const options: BuildBuilderSchema = {};
+const options: BuildBuilderSchema & BrowserBuilderOptions = {
+  main: 'apps/demo/src/main.ts',
+  outputPath: 'dist/apps/demo',
+  index: 'apps/demo/src/index.html',
+  tsConfig: 'apps/demo/tsconfig.json',
+};
 
 describe('Command Runner Builder', () => {
   let architect: Architect;
@@ -14,8 +20,9 @@ describe('Command Runner Builder', () => {
     const registry = new schema.CoreSchemaRegistry();
     registry.addPostTransform(schema.transforms.addUndefinedDefaults);
 
-    architectHost = new TestingArchitectHost('/root', '/root');
+    architectHost = new TestingArchitectHost('../../../..', '../../../..');
     architect = new Architect(architectHost, registry);
+
 
     // This will either take a Node package name, or a path to the directory
     // for the package.json file.
@@ -24,10 +31,12 @@ describe('Command Runner Builder', () => {
 
   it('can run', async () => {
     // A "run" can have multiple outputs, and contains progress information.
+    
     const run = await architect.scheduleBuilder(
       '@my-org/my-builder:build',
       options
     );
+
     // The "result" member (of type BuilderOutput) is the next output.
     const output = await run.result;
 
