@@ -7,7 +7,7 @@ import { MyBuilderSchematicSchema } from './schema';
 
 describe('my-builder schematic', () => {
   let appTree: Tree;
-  const options: MyBuilderSchematicSchema = { name: 'test' };
+  const options: MyBuilderSchematicSchema = { project: 'test' };
 
   const testRunner = new SchematicTestRunner(
     '@my-org/my-builder',
@@ -20,7 +20,7 @@ describe('my-builder schematic', () => {
 
   it('should run successfully', async () => {
     await expect(
-      testRunner.runSchematicAsync('my-builder', options, appTree).toPromise()
+      testRunner.runSchematicAsync('ng-add', options, appTree).toPromise()
     ).resolves.not.toThrowError();
   });
 });

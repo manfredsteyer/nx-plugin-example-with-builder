@@ -20,9 +20,8 @@ describe('Command Runner Builder', () => {
     const registry = new schema.CoreSchemaRegistry();
     registry.addPostTransform(schema.transforms.addUndefinedDefaults);
 
-    architectHost = new TestingArchitectHost('../../../..', '../../../..');
+    architectHost = new TestingArchitectHost('./', './');
     architect = new Architect(architectHost, registry);
-
 
     // This will either take a Node package name, or a path to the directory
     // for the package.json file.
