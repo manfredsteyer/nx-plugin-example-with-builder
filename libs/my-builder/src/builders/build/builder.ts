@@ -15,13 +15,11 @@ export function runBuilder(
   options: Options,
   context: BuilderContext
 ): Observable<BrowserBuilderOutput> {
-  
   return executeBrowserBuilder(options, context).pipe(
     tap(output => {
       updateBundles(output.outputPaths[0]);
     })
   );
-
 }
 
 export default createBuilder<Options>(runBuilder);
